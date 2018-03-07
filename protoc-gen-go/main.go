@@ -49,14 +49,32 @@
 package main
 
 import (
+	"flag"
 	"io/ioutil"
 	"os"
+	"os/exec"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/protoc-gen-go/generator"
 )
 
+// To invoke protoc with a given protoc-gen-go binary, run:
+//	protoc-gen-go --protoc -- --go_out=. a.proto ...
+var runProtoc = flag.Bool("protoc", false, "run protoc with this executable as the Go plugin")
+
 func main() {
+	flag.Parse()
+	if *runProtoc {
+		cmd := exec.Command("protoc", "--plugin=protoc-gen-go="+os.Args[0])
+		cmd.Args = append(cmd.Args, flag.Args()...)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Run(); err != nil {
+			os.Exit(1)
+		}
+		return
+	}
+
 	// Begin by allocating a generator. The request and response structures are stored there
 	// so we can do error handling easily - the response structure contains the field to
 	// report failure.

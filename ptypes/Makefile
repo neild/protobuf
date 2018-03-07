@@ -29,5 +29,13 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+all:
+	@echo "make regenerate  - recompile .pb.go from .proto"
+	@echo "make refetch     - fetch latest version from upstream"
+
 regenerate:
-	protoc -Iconformance_proto -I$(HOME)/src/protobuf/src --go_out=Mgoogle/protobuf/any.proto=github.com/golang/protobuf/ptypes/any,Mgoogle/protobuf/duration.proto=github.com/golang/protobuf/ptypes/duration,Mgoogle/protobuf/struct.proto=github.com/golang/protobuf/ptypes/struct,Mgoogle/protobuf/timestamp.proto=github.com/golang/protobuf/ptypes/timestamp,Mgoogle/protobuf/wrappers.proto=github.com/golang/protobuf/ptypes/wrappers,Mgoogle/protobuf/field_mask.proto=google.golang.org/genproto/protobuf:. conformance_proto/conformance.proto
+	./regen.sh
+
+refetch:
+	./refetch.sh
+	./regen.sh

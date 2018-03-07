@@ -1,6 +1,6 @@
 # Go support for Protocol Buffers - Google's data interchange format
 #
-# Copyright 2010 The Go Authors.  All rights reserved.
+# Copyright 2016 The Go Authors.  All rights reserved.
 # https://github.com/golang/protobuf
 #
 # Redistribution and use in source and binary forms, with or without
@@ -29,11 +29,28 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Includable Makefile to add a rule for generating .pb.go files from .proto files
-# (Google protocol buffer descriptions).
-# Typical use if myproto.proto is a file in package mypackage in this directory:
-#
-#	include $(GOROOT)/src/pkg/github.com/golang/protobuf/Make.protobuf
+PROTOBUF_ROOT=~/src/protobuf
+CONFORMANCE_TEST_RUNNER=$(PROTOBUF_ROOT)/conformance/conformance-test-runner
 
-%.pb.go: %.proto
-	protoc --go_out=. $<
+all:
+	@echo To run the tests in this directory, acquire the main protobuf
+	@echo distribution from:
+	@echo
+	@echo '   https://github.com/google/protobuf'
+	@echo
+	@echo Build the test runner with:
+	@echo
+	@echo '   cd conformance && make conformance-test-runner'
+	@echo
+	@echo And run the tests in this directory with:
+	@echo
+	@echo '   make test PROTOBUF_ROOT=<protobuf distribution>'
+
+test:
+	@if [ -x $(CONFORMANCE_TEST_RUNNER) ]; then \
+	  $(CONFORMANCE_TEST_RUNNER) --failure_list failure_list_go.txt ./conformance.sh; \
+	else echo "SKIP: conformance test runner not installed"; \
+	fi
+
+regenerate:
+	protoc --plugin=protoc-gen-go=../protoc-gen-go/protoc-gen-go.sh --go_out=. internal/conformance_proto/*.proto

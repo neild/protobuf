@@ -32,6 +32,6 @@
 # Not stored here, but descriptor.proto is in https://github.com/google/protobuf/
 # at src/google/protobuf/descriptor.proto
 regenerate:
-	@echo WARNING! THIS RULE IS PROBABLY NOT RIGHT FOR YOUR INSTALLATION
-	cp $(HOME)/src/protobuf/include/google/protobuf/descriptor.proto .
-	protoc --go_out=../../../../.. -I$(HOME)/src/protobuf/include $(HOME)/src/protobuf/include/google/protobuf/descriptor.proto
+	#@echo WARNING! THIS RULE IS PROBABLY NOT RIGHT FOR YOUR INSTALLATION
+	#cp $(HOME)/src/protobuf/include/google/protobuf/descriptor.proto .
+	#protoc --go_out=../../../../.. -I$(HOME)/src/protobuf/include $(HOME)/src/protobuf/include/google/protobuf/descriptor.proto

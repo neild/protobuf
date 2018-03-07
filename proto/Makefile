@@ -29,14 +29,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-install:
-	go install
+PROTOC_FLAGS=--plugin=../protoc-gen-go/protoc-gen-go.sh
 
-test: install generate-test-pbs
+test:
 	go test
 
-generate-test-pbs:
-	make install
-	make -C test_proto
-	protoc --go_out=Mtest_proto/test.proto=github.com/golang/protobuf/proto/test_proto,Mgoogle/protobuf/any.proto=github.com/golang/protobuf/ptypes/any:. proto3_proto/proto3.proto
-	make
+regenerate:
+	protoc $(PROTOC_FLAGS) --go_out=. test_proto/test.proto
+	protoc $(PROTOC_FLAGS) --go_out=. proto3_proto/proto3.proto
